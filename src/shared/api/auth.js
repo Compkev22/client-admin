@@ -1,13 +1,14 @@
-import { axiosAuth} from "./api";
+import { axiosAuth } from "./api";
 
-export const login = async = async (data) => {
-    return await axiosAuth.post("/auth/login", data);
+// 1. CORREGIDO: Se quitó el "= async" extra
+export const login = async (data) => {
+    return await axiosAuth.post("/api/v1/Auth/login", data);
 };
 
+// 2. CORREGIDO: "Headers" se cambió a "headers" en minúscula
 export const register = async (data) => {
     return await axiosAuth.post("/auth/register", data, {
-        Headers: {"Content-Type": "multipart/form-data", }    
-
+        headers: { "Content-Type": "multipart/form-data" }    
     }); 
 };
 

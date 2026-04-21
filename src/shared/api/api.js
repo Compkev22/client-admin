@@ -4,7 +4,7 @@ import { useAuthStore } from '../../features/auth/authStore.js';
 
 //Instancia de axios
 const axiosAuth = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_AUTH_URL,
     timeout: 8000,
     headers: {
         'Content-Type': 'application/json',
@@ -105,8 +105,10 @@ const handleRefreshToken = async function (_error) {
  
 axiosAuth.interceptors.response.use((res) => res, handleRefreshToken);
  
-axiosAdmin.interceptors.response.use((res) => res, handleRefreshToken);
+//axiosAdmin.interceptors.response.use((res) => res, handleRefreshToken);
  
 // ================= EXPORT AXIOS =================
-export { axiosAuth, axiosAdmin };
+//export { axiosAuth, axiosAdmin };
+export {axiosAuth}
 export { handleRefreshToken };
+
