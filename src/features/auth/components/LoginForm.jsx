@@ -19,9 +19,11 @@ export const LoginForm = ({ onForgot }) => {
     // Corregido el nombre de onSumnit a onSubmit (es una buena práctica)
     const onSubmit = async (data) => {
         const res = await login(data);
-        if (res.success) {
+        if (res) {
             navigate("/dashboard");
             toast.success("¡Bienvenido de nuevo!");
+        }else {
+            toast.error(res.error);
         }
     };
 

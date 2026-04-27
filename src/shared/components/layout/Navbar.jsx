@@ -1,4 +1,5 @@
 import imgLogo from "../../../assets/img/kinal_sports.png";
+import { AvatarUser } from "../../ui/AvatarUser";
 
 export const Navbar = () => {
     return (
@@ -18,8 +19,8 @@ export const Navbar = () => {
                     </h1>
                 </div>
 
-                {/* Avatar placeholder */}
-                <div className="w-10 h-10 rounded-full bg-gray-200" />
+                {/* Avatar user */}
+                <AvatarUser />
             </div>
         </nav>
     );
