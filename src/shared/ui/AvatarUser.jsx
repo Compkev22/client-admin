@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../../features/auth/authStore";
-import defaultAvatarImg from "../../assets/img/avatarDefault-1749508519496.png";
+const defaultAvatarImg = "/avatarDefault-1749508519496.png";
 
 export const AvatarUser = () => {
     const { user, logout } = useAuthStore();
@@ -40,6 +40,10 @@ const avatarSrc = (user?.profilePicture && user.profilePicture.length > 5)
                 src={avatarSrc}
                 alt={user?.username}
                 className="w-10 h-10 rounded-full object-cover border-2 border-gray-200 cursor-pointer hover:border-main-blue transition-all"
+                onError={(e) => {
+                 // Si todo falla, carga un avatar con la inicial del usuario
+                e.target.src = `https://ui-avatars.com/api/?name=${user?.username || 'U'}&background=08316d&color=fff`;
+    }}
             />
 
             {/* Menú Desplegable */}
