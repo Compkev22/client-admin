@@ -1,4 +1,4 @@
-import { useAuthStore } from '../authStore';
+import { useAuthStore } from '../store/authStore';
 import { useNavigate } from "react-router-dom"; // Corregido: se quitó 'data'
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast"; // Corregido: toas -> toast

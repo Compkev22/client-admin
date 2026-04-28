@@ -15,9 +15,9 @@ export const Sidebar = () => {
         <aside className="w-60 bg-white min-h-[calc(100vh-4rem)] p-4 shadow-sm">
             <ul className="space-y-1">
                 {items.map((item) => {
- 
-                const active = location.pathname === item.to; 
-                
+
+                    const active = useLocation().pathname === item.to;                    
+
                     return (
                         <li key={item.label}>
                             <Link to={item.to} className={`block px-4 py-2 rounded-lg font-medium transition-colors sidebar-underline${active ? " active text-main-blue" : " text-gray-700 hover:bg-gray-100"}`}
