@@ -28,7 +28,7 @@ export const LoginForm = ({ onForgot }) => {
     };
  
     return (
-        <form onSubmit={handleSubmit(onSumnit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Sección de de email o usuario */}
             <div>
                 <label className="block text-sm font-medium text-gray-800 mb-1.5">
