@@ -6,7 +6,7 @@ import { useFieldsStore } from "../../users/store/adminStore";
 import { useUIStore } from "../../auth/store/uiStore";
 
 import { showError } from "../../../shared/utils/toast";
-import { Spinner } from "../../auth/components/Spinner"; 
+import { Spinner } from "../../auth/components/Spinner";
 import { FieldModal } from "./FieldModal";
 
 export const Fields = () => {
@@ -16,8 +16,8 @@ export const Fields = () => {
 
     const [openModal, setOpenModal] = useState(false);
     // Cambiamos a selectedField para seguir la convención del profe
-    const [selectedField, setSelectedField] = useState(null); 
-    
+    const [selectedField, setSelectedField] = useState(null);
+
     // 2. Cargar campos al montar
     useEffect(() => {
         getFields();
@@ -45,7 +45,7 @@ export const Fields = () => {
                 </div>
 
                 {/* 5. Botón Agregar con OnClick */}
-                <button 
+                <button
                     className="bg-main-blue px-4 py-2 rounded text-white hover:opacity-90 transition"
                     onClick={() => {
                         setSelectedField(null);
@@ -58,17 +58,17 @@ export const Fields = () => {
 
             {/* GRID RESPONSIVE */}
             <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                
+
                 {/* 6. Mapeo de canchas reales de la base de datos */}
                 {fields.map((field) => (
-                    <div 
-                        key={field._id} 
+                    <div
+                        key={field._id}
                         className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]"
                     >
                         {/* IMAGEN DINÁMICA */}
                         <div className="w-full h-52 bg-gray-100 flex items-center justify-center">
                             <img
-                                src={`https://res.cloudinary.com/dwwy7suwg/image/upload/v1777913827/kinal_sports/${field.photo}`}                                
+                                src={`https://res.cloudinary.com/dwwy7suwg/image/upload/kinalSports/${field.photo}`}
                                 alt={field.fieldName}
                                 className="max-h-full max-w-full object-contain rounded-t-xl"
                             />
@@ -98,7 +98,7 @@ export const Fields = () => {
 
                             {/* BOTONES */}
                             <div className="flex gap-3 mt-5">
-                                <button 
+                                <button
                                     className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition"
                                     onClick={() => {
                                         setSelectedField(field);
@@ -108,7 +108,7 @@ export const Fields = () => {
                                     ✏️ Editar
                                 </button>
 
-                                <button 
+                                <button
                                     className="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition"
                                     onClick={() =>
                                         openConfirm({
@@ -135,7 +135,7 @@ export const Fields = () => {
                 }}
                 field={selectedField}
             />
-            
+
         </div>
     );
 };
