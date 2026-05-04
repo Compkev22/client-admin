@@ -1,5 +1,81 @@
+import { useEffect, useState } from "react";
+import { set, useForm } from "react-hook-form";
+
+import { useFieldsStore } from "../../users/store/adminStore";
+
+import { Spinner} from "../../auth/components/Spinner";
+import { useSaveField } from "../hooks/useSaveField";
+
+import { showSuccess, showError } from "../../../shared/utils/toast";
+
+
 export const FieldModal = ({ isOpen, onClose, field }) => {
+  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const { saveField } = useSaveField();
+  const loading = useFieldsStore((state) => state.loading);
+
+  const [preview, setPreview] = useState(null);
+
+  useEffect(() => {
+     if(isOpen){
+      if (field) {
+        reset({
+          fieldName: field.fieldName,
+          fieldType: field.fieldType,
+          capacity: field.capacity,
+          pricePerHour: field.pricePerHour,
+          description: field.description,
+        });
+        setPreview(field.imageUrl); // Asumiendo que el campo tiene una URL de imagen
+      }else {
+        reset({
+          fieldName: "",
+          fieldType: "",
+          capacity: "",
+          pricePerHour: "",
+          description: "",
+        });
+        setPreview(null);
+      }
+    } 
+  },[isOpen, field, reset])
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === "photo" && value.photo && value.photo.length > 0) {
+        setPreview(URL.createObjectURL(value.photo[0]));
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
+  const onSubmit = async (data) => {
+
+    try {
+      await saveField(data, field?.id);
+      showSuccess(
+        field
+        ? "Campo actualizado exitosamente"
+        : "Campo creado exitosamente"
+      );
+      reset();
+      setPreview(null);
+      onClose();
+    } catch (error) {
+      showError("Error al guardar el campo");
+    }
+  }
+
   if (!isOpen) return null;
+  
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 px-3 sm:px-4">
@@ -39,6 +115,15 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
               <input
                 className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                 placeholder="Ej. Cancha Central"
+
+                {...register("fieldName", { 
+                  required: "El nombre es obligatorio", 
+                  minLength: { 
+                    value: 3, 
+                    message: "Debe tener al menos 3 caracteres" 
+                  },
+                })}
+
               />
             </div>
 
@@ -47,12 +132,17 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
               <label className="text-sm font-semibold text-gray-700 mb-1">
                 Tipo de cancha
               </label>
-              <select className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+              <select className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                {...register("fieldType", { 
+                  required: "El tipo es obligatorio" 
+                })}
+              >
                 <option value="">Seleccione un tipo</option>
                 <option value="SINTETICA">Sintética</option>
                 <option value="CONCRETO">Concreto</option>
                 <option value="NATURAL">Natural</option>
               </select>
+              
             </div>
 
             {/* Capacidad */}
@@ -60,7 +150,11 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
               <label className="text-sm font-semibold text-gray-700 mb-1">
                 Capacidad
               </label>
-              <select className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+              <select className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                {...register("fieldCapacity", { 
+                  required: "La capacidad es obligatoria" 
+                })}
+              >
                 <option value="">Seleccione capacidad</option>
                 <option value="FUTBOL_5">Fútbol 5</option>
                 <option value="FUTBOL_7">Fútbol 7</option>
@@ -77,6 +171,10 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
                 type="number"
                 className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                 placeholder="Q100"
+                {...register("pricePerHour", { 
+                  required: "El precio es obligatorio", 
+                  min: { value: 1, message: "El precio debe ser mayor a 0" }
+                })}
               />
             </div>
 
@@ -88,6 +186,9 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
               <textarea
                 className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                 placeholder="Detalles del campo..."
+                {...register("description", { 
+                  required: "La descripción es obligatoria",
+                })}
               />
             </div>
 
@@ -100,6 +201,7 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
                 type="file"
                 className="w-full px-3 py-2 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition cursor-pointer"
                 accept="image/*"
+                {...register("photo")}
               />
             </div>
           </div>
