@@ -34,7 +34,11 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
           pricePerHour: field.pricePerHour,
           description: field.description,
         });
-        setPreview(field.imageUrl); // Asumiendo que el campo tiene una URL de imagen
+        if (field.photo) {
+           setPreview(`https://res.cloudinary.com/dwwy7suwg/image/upload/kinalSports/${field.photo}`);
+        } else {
+           setPreview(null);
+        }      
       } else {
         reset({
           fieldName: "",
@@ -60,7 +64,7 @@ export const FieldModal = ({ isOpen, onClose, field }) => {
   const onSubmit = async (data) => {
  
     try {
-      await saveField(data, field?.id);
+      await saveField(data, field?._id);
       showSuccess(
         field
           ? "Campo actualizado exitosamente"

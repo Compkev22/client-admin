@@ -35,7 +35,7 @@ export const updateTeam = async (id, data) => {
 };
  
 export const deleteTeam = async (id) => {
-    return await axiosAdmin.put(`/teams/${id}/deactivate`);
+    return await axiosAdmin.put(`/teams/${id}/deactivate`, );
 };
  
 // ================= FIELDS =================
@@ -56,7 +56,7 @@ export const updateField = async (id, data) => {
 };
  
 export const deleteField = async (id) => {
-    return await axiosAdmin.put(`/fields/${id}/deactivate`);
+    return await axiosAdmin.put(`/fields/${id}/deactivate`, {});
 };
  
 // ================= RESERVATIONS =================

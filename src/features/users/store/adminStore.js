@@ -83,4 +83,52 @@ export const useFieldsStore = create((set, get) => ({
       });
     }
   },
+
+  deleteField: async (id) => {
+    try {
+      set({ loading: true, error: null });
+
+      // Llamamos a la petición que importaste arriba
+      await _deleteFieldRequest(id);
+
+      // Usamos get().fields para obtener las canchas actuales 
+      // y filtramos para quitar la que acabamos de eliminar
+      set({
+        fields: get().fields.filter((field) => field._id !== id),
+        loading: false,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error al eliminar la cancha",
+        loading: false,
+      });
+    }
+  },
+
+  updateField: async (id, formData) => {
+    try {
+      set({ loading: true, error: null });
+
+      // 1. Hacemos la petición PUT a la API (le pasamos el ID y los datos/imagen)
+      const response = await _updateFieldRequest(id, formData);
+
+      // 2. Actualizamos la lista en pantalla
+      // Usamos .map() para buscar la cancha vieja por su ID y reemplazarla con la nueva información que nos devuelve el backend
+      set({
+        fields: get().fields.map((field) =>
+          field._id === id ? response.data.data : field
+        ),
+        loading: false,
+      });
+      
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error al actualizar la cancha",
+        loading: false,
+      });
+      // Lanzamos el error para que el Modal pueda atraparlo y no se cierre si falla
+      throw error; 
+    }
+  },
+
 }));
